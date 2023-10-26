@@ -1,0 +1,51 @@
+from NewsPapper_app.models import *
+user1 = User.objects.create(username='Danila', first_name='Pavlov')
+Author.objects.create(userA=user1)
+
+user2 = User.objects.create(username='Ivan', first_name='Petrov')
+Author.objects.create(userA=user2)
+
+Category.objects.create(categoryName='Sport')
+Category.objects.create(categoryName='IT')
+Category.objects.create(categoryName='Paint')
+Category.objects.create(categoryName='Education')
+
+
+Post.objects.create(author = Author.objects.get(userA=User.objects.get(username='Danila')), catType = 'AR', title = 'Python the best', text = 'Hellow, world!')  
+Post.objects.create(author = Author.objects.get(userA=User.objects.get(username='Danila')), catType = 'AR', title = 'Brasilia is a champion again', text = 'Brasilia again wins a global tournament')
+Post.objects.create(author = Author.objects.get(userA=User.objects.get(username='Danila')), catType = 'NW', title = 'School number 3', text = 'In school number 3 today changes a director')
+
+
+p1 = Post.objects.get(pk=1)
+p2 = Post.objects.get(pk=2) 
+p3 = Post.objects.get(pk=3)
+
+c1 = Category.objects.get(categoryName='IT') 
+c2 = Category.objects.get(categoryName='Sport')
+c3 = Category.objects.get(categoryName = 'Education')
+
+p1.postCat.add(c1,c3)
+p2.postCat.add(c2,c3)
+p3.postCat.add(c1,c3)
+
+Comment.objects.create(userCom=User.objects.get(username='Ivan'), postCom = Post.objects.get(pk=1), textCom = 'Agree') 
+Comment.objects.create(userCom=User.objects.get(username='Ivan'), postCom = Post.objects.get(pk=2), textCom = 'again??')
+Comment.objects.create(userCom=User.objects.get(username='Ivan'), postCom = Post.objects.get(pk=3), textCom = 'Its cool')  
+
+Post.objects.get(pk=1).like() 
+Post.objects.get(pk=2).dislike() 
+Post.objects.get(pk=3).like()    
+Comment.objects.get(pk=1).dislike()
+Comment.objects.get(pk=2).like()    
+Comment.objects.get(pk=3).dislike()
+
+Author.objects.get(userA=User.objects.get(username='Danila')).update_rating()
+Author.objects.get(userA=User.objects.get(username='Ivan')).update_rating()
+
+best = Author.objects.all().order_by('-rateA').values('userA','rateA')[0] 
+print(best)
+dateCreate =Post.objects.all().order_by('-rate').values('dateCreate','author','rate','title','text') [0] 
+print(dateCreate)
+allComs = Comment.objects.all().values('dateCreate','id','rateC','textCom')
+print(allComs)
+
